@@ -1,9 +1,6 @@
-
 DROP TABLE CELDA;
 DROP TABLE TABLERO;
---
---
---
+
  CREATE TABLE TABLERO(
  	id 		number(12)	not null primary key,
  	X_columnas	 number(2) not null,
@@ -13,17 +10,15 @@ DROP TABLE TABLERO;
  	id 		number(12)	not null primary key,
      X_columna	 number(2) not null,
  	Y_fila	 number(2) not null,
-     contenido 	char(1) 	not null check (contenido in ('A','T','P','B','.') ),
+     contenido 	char(1) 	not null check (contenido in ('A','T','P','B','.',
+     'W','R','L','H') ),
  	tableroid 	number(12)	not null references TABLERO
  );
 
 
- insert into TABLERO (id,X_columnas,Y_filas) values (1,50,15);
+insert into TABLERO (id,X_columnas,Y_filas) values (1,50,15);
  commit;
---
---
--- --cargar un tablero
--- 
+
 CREATE OR REPLACE PROCEDURE CARGAR_TABLERO (idTablero Tablero.id%TYPE) AS
  IDS NUMBER(8) := 0;
  contador NUMBER(8) := 0;
@@ -61,18 +56,14 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
              END IF;
  			END LOOP;
      END LOOP;
-     --RETURN 0;
- END;
+ END CARGAR_TABLERO;
 
 CREATE OR REPLACE PROCEDURE VER_TABLERO (idtablero Tablero.id%TYPE) AS
 casilla CHAR(1);
---i NUMBER(2,0);
---j NUMBER(2,0);
+
 BEGIN
-    --DBMS_OUTPUT.PUT_LINE('Start');
    		FOR j IN 0..14 LOOP
  			  FOR i IN 0..49 LOOP
-                        --DBMS_OUTPUT.PUT_LINE('Loop: '||i||j);
  						SELECT contenido
                         INTO casilla
                           FROM CELDA
@@ -85,7 +76,34 @@ BEGIN
                         END	IF;
  			END LOOP;
      END LOOP;
---     EXCEPTION
---     WHEN NO_DATA_FOUND THEN
---     DBMS_OUTPUT.PUT_LINE('Error tablero: '||i||j);
- END;
+ END VER_TABLERO;
+
+CREATE OR REPLACE PROCEDURE CARGAR_EQUIPOS (cantidadEquipos number,  idTablero Tablero.id%TYPE) AS
+pos number(2);
+valor char(1);
+type NombresEqupipos IS VARRAY(4) OF char(1); 
+  nombres NombresEqupipos; 
+BEGIN
+pos :=0;
+  --Se asume que el tereno no posee agua al iniciar la partida. De lo contrario
+  --Un Gusano podria iniciar ahogado. Si cae en una bomba se asume mala suerte.
+nombres := NombresEqupipos('W', 'R', 'L', 'H');
+      FOR equipos in 1..cantidadEquipos LOOP
+      --Por cada equipo
+        FOR gusanos in 1..4 LOOP
+        --Cargamos 4 gusanos
+          pos:=pos+DBMS_RANDOM.VALUE(1,3);
+          --Separados entre  1 y 3 lugares
+          valor := nombres(equipos);
+          UPDATE CELDA
+          SET CELDA.contenido = valor
+           WHERE CELDA.id in(
+               SELECT c.id
+               FROM CELDA c 
+               WHERE c.tableroid = idTablero 
+               AND c.x_columna = pos 
+               AND c.y_fila = 0
+            );
+        END LOOP;
+      END LOOP;
+END;
