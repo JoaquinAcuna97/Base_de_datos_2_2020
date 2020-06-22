@@ -9,20 +9,20 @@ DROP TABLE TABLERO;
  	X_columnas	 number(2) not null,
  	Y_filas		 number(2) not null
  );
+
  CREATE TABLE CELDA(
- 	id 		number(12)	not null primary key,
-     X_columna	 number(2) not null,
- 	Y_fila	 number(2) not null,
-     contenido 	char(1) 	not null check (contenido in ('A','T','P','B','.') ),
- 	tableroid 	number(12)	not null references TABLERO
+ 	id NUMBER(12) NOT NULL PRIMARY KEY,
+    X_columna number(2) NOT NULL,
+ 	Y_fila NUMBER(2) NOT NULL,
+    contenido char(1) NOT NULL CHECK (contenido in ('A','T','P','B','.','W','R','L','H')),
+ 	tableroid NUMBER(12) NOT NULL REFERENCES TABLERO,
+    idGusano NUMBER(10) REFERENCES GUSANO
  );
 
 
  insert into TABLERO (id,X_columnas,Y_filas) values (1,50,15);
  commit;
---
---
--- --cargar un tablero
+--cargar un tablero
 -- 
 CREATE OR REPLACE PROCEDURE CARGAR_TABLERO (idTablero Tablero.id%TYPE) AS
  IDS NUMBER(8) := 0;
