@@ -46,12 +46,12 @@ BEGIN
                    AND X_Columna = regFila.X_Columna;
                 continuar := FALSE;
             ELSIF regFila.Contenido <> '.' THEN
-                Raise_Application_Error(-20.001, 'No se puede realizar el desplazamiento');
+                Raise_Application_Error(-20001, 'No se puede realizar el desplazamiento');
             END IF;
             FETCH cursorFilas INTO regFila;
         END LOOP;
         CLOSE cursorFilas;
     ELSE
-        Raise_Application_Error(-20001, 'No se puede realizar el desplazamiento');
+        Raise_Application_Error(-20002, 'No se puede realizar el desplazamiento');
     END IF;
 END;
