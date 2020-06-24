@@ -32,18 +32,21 @@ BEFORE INSERT OR UPDATE ON PARTIDA
 FOR EACH ROW
 DECLARE varExisteHumano VARCHAR(1);
 BEGIN
-    dbms_output.put_line('Pase');
-	SELECT Letra
-	  INTO varExisteHumano
-	  FROM EQUIPO e
-	  JOIN JUGADOR j ON j.idEquipo = e.idEquipo
-	 WHERE idPartida = :new.idPartida
-	   AND j.Tipo = 'Humano';
-    dbms_output.put_line('Select');
+    BEGIN
+        SELECT Letra
+          INTO varExisteHumano
+          FROM EQUIPO e
+          JOIN JUGADOR j ON j.idEquipo = e.idEquipo
+         WHERE idPartida = :new.idPartida
+           AND j.Tipo = 'Humano';
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            varExisteHumano := NULL;
+    END;
 	IF varExisteHumano IS NULL AND :new.Estado = 'INICIADA' THEN
 		raise_application_error(-20003,'Error: La partida debe contener al menos un jugador humano');
 	END IF;
-END unJugadorHumano;
+END unJugadorHumano;--OK
 
 
 CREATE OR REPLACE TRIGGER gusanoMuereContactoAgua
@@ -84,4 +87,4 @@ BEGIN
 		:new.Contenido := '.';
 		:new.idGusano := NULL;
 	END IF;
-END explosionCaja;
+END explosionCaja;--OK
