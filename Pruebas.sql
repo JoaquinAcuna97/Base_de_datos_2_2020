@@ -16,7 +16,7 @@ INSERT INTO GUSANO (salud, idEquipo, accion) VALUES (100,1,NULL);
 INSERT INTO GUSANO (salud, idEquipo, accion) VALUES (100,1,NULL);
 INSERT INTO GUSANO (salud, idEquipo, accion) VALUES (100,1,NULL);
 INSERT INTO GUSANO (salud, idEquipo, accion) VALUES(100,1,NULL);
-INSERT INTO GUSANO (salud, idEquipo, accion) VALUES(100,1,NULL); 
+INSERT INTO GUSANO (salud, idEquipo, accion) VALUES(100,1,NULL);
 INSERT INTO GUSANO (salud, idEquipo, accion) VALUES(100,1,NULL);
 
 SELECT * FROM GUSANO;
@@ -27,3 +27,15 @@ EXEC VER_TABLERO(1);
 EXEC SALTO_BUNGEE(1 , 16, 12, 1)
 
 --PRUEBAS CONTROL 8 GUSANOS POR EQUIPO
+
+
+--PRUEBAS Trigger gusanoSoloEnAire
+
+INSERT INTO  TABLERO (id,X_columnas,Y_filas) VALUES (1,50,15);
+EXEC CARGAR_TABLERO(1);
+
+UPDATE CELDA
+   SET Contenido = 'W'
+ WHERE TableroId = idTablero
+   AND X_Columna =  0
+   AND Y_Fila = 13;

@@ -1,7 +1,7 @@
 
 
  insert into TABLERO (id,X_columnas,Y_filas) values (1,50,15);
- commit;
+
 --cargar un tablero
 --
 CREATE OR REPLACE PROCEDURE CARGAR_TABLERO (idTablero Tablero.id%TYPE) AS
@@ -37,11 +37,11 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
  								ids := ids +1;
  								insert into CELDA (id,X_columna,Y_fila,contenido,tableroid)
  								values (ids,i,j,casilla,1);
- 								commit;
+
              END IF;
  			END LOOP;
      END LOOP;
-     --RETURN 0;
+     commit;
  END;
 
 

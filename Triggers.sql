@@ -6,7 +6,7 @@ DECLARE varCantidadGusanos NUMBER;
 BEGIN
     SELECT COUNT(*)
       INTO varCantidadGusanos
-       FROM GUSANO 
+       FROM GUSANO
       WHERE idEquipo = :new.idEquipo;
 	IF varCantidadGusanos >= 8 THEN
 		raise_application_error(-20001,'Error: Los equipos solo pueden tener un máximo de 8 gusanos');
@@ -57,10 +57,10 @@ BEGIN
 	IF :OLD.Contenido = 'A' THEN
 		SELECT idGusano
 		  INTO varIdGusano
-		  FROM GUSANO g 
+		  FROM GUSANO g
 		 WHERE g.idGusano = :new.idGusano;
 	END IF;
-    IF varIdGusano IS NOT NULL THEN
+  IF varIdGusano IS NOT NULL THEN
         UPDATE GUSANO
            SET salud = 0
          WHERE GUSANO.idGusano = :new.idGusano;
@@ -68,6 +68,17 @@ BEGIN
 		:new.idGusano := NULL;
 	END IF;
 END gusanoMuereContactoAgua;--OK
+
+CREATE OR REPLACE TRIGGER gusanoSoloEnAire
+BEFORE UPDATE ON CELDA
+FOR EACH ROW
+BEGIN
+	IF :NEW.Contenido IN ('W', 'R', 'L', 'H') THEN
+    IF :OLD.Contenido != '.' THEN
+      raise_application_error(-20003,'Error: un gusano solo puede ir en el aire');
+    END IF;
+	END IF;
+END gusanoSoloEnAire;
 
 CREATE OR REPLACE TRIGGER explosionCaja
 BEFORE UPDATE ON CELDA
@@ -77,7 +88,7 @@ BEGIN
 	IF :OLD.Contenido = 'B' THEN
 		SELECT idGusano
 		  INTO varIdGusano
-		  FROM GUSANO g 
+		  FROM GUSANO g
 		 WHERE g.idGusano = :new.idGusano;
 	END IF;
 	IF varIdGusano IS NOT NULL THEN

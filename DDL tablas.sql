@@ -14,12 +14,13 @@ CREATE TABLE ARMA(
 	grupo VARCHAR2(5)
 );
 
-CREATE TABLE GUSANO(
-	idGusano NUMBER GENERATED ALWAYS AS IDENTITY(START WITH 1 INCREMENT by 1) primary key,
-	salud NUMBER(3) NOT NULL CHECK(salud >=0 AND salud <= 100),
-	idEquipo NUMBER(10) NOT NULL REFERENCES EQUIPO  ON DELETE CASCADE,
-	accion VARCHAR(50) CHECK( accion IN ('Caminar', 'Saltar'))
+CREATE TABLE PARTIDA(
+	idPartida NUMBER GENERATED ALWAYS AS IDENTITY(START WITH 1 INCREMENT by 1) primary key,
+	duracion NUMBER(2) NOT NULL CHECK( duracion IN(15, 20, 25)),
+	dificultad VARCHAR(50) NOT NULL CHECK(dificultad IN ('Facil', 'Intermedio', 'Dificil')),
+	estado VARCHAR2(50) NOT NULL CHECK( estado IN ('CARGANDO', 'INICIADA', 'FINALIZADA'))
 );
+
 
 CREATE TABLE EQUIPO(
 	idEquipo NUMBER GENERATED ALWAYS AS IDENTITY(START WITH 1 INCREMENT by 1) primary key,
@@ -31,12 +32,15 @@ CREATE TABLE EQUIPO(
 	CONSTRAINT unique_equipo_partida UNIQUE(letra, idPartida)
 );
 
-CREATE TABLE PARTIDA(
-	idPartida NUMBER GENERATED ALWAYS AS IDENTITY(START WITH 1 INCREMENT by 1) primary key,
-	duracion NUMBER(2) NOT NULL CHECK( duracion IN(15, 20, 25)),
-	dificultad VARCHAR(50) NOT NULL CHECK(dificultad IN ('Facil', 'Intermedio', 'Dificil')),
-	estado VARCHAR2(50) NOT NULL CHECK( estado IN ('CARGANDO', 'INICIADA', 'FINALIZADA'))
+CREATE TABLE GUSANO(
+	idGusano NUMBER GENERATED ALWAYS AS IDENTITY(START WITH 1 INCREMENT by 1) primary key,
+	salud NUMBER(3) NOT NULL CHECK(salud >=0 AND salud <= 100),
+	idEquipo NUMBER(10) NOT NULL REFERENCES EQUIPO  ON DELETE CASCADE,
+	accion VARCHAR(50) CHECK( accion IN ('Caminar', 'Saltar'))
 );
+
+
+
 
 CREATE TABLE JUGADOR(
 	idJugador NUMBER GENERATED ALWAYS AS IDENTITY(START WITH 1 INCREMENT by 1) primary key,
@@ -57,10 +61,10 @@ CREATE TABLE ARMASJUGADOR(
  );
 
  CREATE TABLE CELDA(
- 	id NUMBER(12) NOT NULL PRIMARY KEY,
-    X_columna number(2) NOT NULL,
- 	Y_fila NUMBER(2) NOT NULL,
-    contenido char(1) NOT NULL CHECK (contenido in ('A','T','P','B','.','W','R','L','H')),
- 	tableroid NUMBER(12) NOT NULL REFERENCES TABLERO,
-    idGusano NUMBER(10) REFERENCES GUSANO
+	id NUMBER(12) NOT NULL PRIMARY KEY,
+	X_columna number(2) NOT NULL,
+	Y_fila NUMBER(2) NOT NULL,
+	contenido char(1) NOT NULL CHECK (contenido in ('A','T','P','B','.','W','R','L','H')),
+	tableroid NUMBER(12) NOT NULL REFERENCES TABLERO,
+	idGusano NUMBER(10) REFERENCES GUSANO
  );
