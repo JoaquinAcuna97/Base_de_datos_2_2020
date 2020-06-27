@@ -10,6 +10,7 @@ create or replace NONEDITIONABLE PROCEDURE SALTO_BUNGEE(idTablero NUMBER, Column
           AND X_Columna = Columna
           AND Y_Fila >= Fila;
     regFila cursorFilas%ROWTYPE;
+	noDesplaza EXCEPTION;
 BEGIN
     SELECT e.letra
       INTO v_Equipo
@@ -21,6 +22,10 @@ BEGIN
     FETCH cursorFilas INTO regFila;
     IF regFila.Contenido IN ('A','B') THEN
         UPDATE CELDA
+           SET idGusano = NULL
+         WHERE tableroId = idTablero
+           AND idGusano = gusanoId;        
+        UPDATE CELDA
            SET Contenido = v_Equipo
          WHERE TableroId = idTablero
            AND X_Columna =  regFila.X_Columna
@@ -31,6 +36,11 @@ BEGIN
         WHILE cursorFilas%FOUND AND continuar LOOP
             IF regFila.Contenido IN ('P','T') THEN
                 UPDATE CELDA
+				   SET idGusano = NULL
+                     , contenido = '.'
+				 WHERE tableroId = idTablero
+				   AND idGusano = gusanoId;
+                UPDATE CELDA
                    SET Contenido = v_Equipo,
                        idGusano = gusanoId
                  WHERE tableroId = idTablero
@@ -39,19 +49,32 @@ BEGIN
                 continuar := FALSE;
             ELSIF regFila.Contenido IN ('B', 'A') THEN
                 UPDATE CELDA
+				   SET idGusano = NULL
+				 WHERE tableroId = idTablero
+				   AND idGusano = gusanoId;
+				UPDATE CELDA
                    SET Contenido = v_Equipo,
                        idGusano = gusanoId
                  WHERE tableroId = idTablero
                    AND Y_Fila = regFila.Y_Fila
-                   AND X_Columna = regFila.X_Columna;
+                   AND X_Columna = regFila.X_Columna;				
                 continuar := FALSE;
             ELSIF regFila.Contenido <> '.' THEN
-                Raise_Application_Error(-20.001, 'No se puede realizar el desplazamiento');
+                RAISE noDesplaza;
+				--DBMS_OUTPUT.PUT_LINE('Error: No se puede realizar el desplazamiento');
             END IF;
             FETCH cursorFilas INTO regFila;
         END LOOP;
         CLOSE cursorFilas;
     ELSE
-        Raise_Application_Error(-20001, 'No se puede realizar el desplazamiento');
+		RAISE noDesplaza;
+        --DBMS_OUTPUT.PUT_LINE('Error: No se puede realizar el desplazamiento');
     END IF;
+	COMMIT;
+	EXCEPTION
+	WHEN noDesplaza THEN
+		DBMS_OUTPUT.PUT_LINE('Error: No se puede realizar el desplazamiento');
+	WHEN OTHERS THEN
+		DBMS_OUTPUT.PUT_LINE('Error: ' || SQLCODE || ' - Mensaje: ' || SQLERRM);
+    ROLLBACK;
 END;
