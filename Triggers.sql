@@ -99,3 +99,18 @@ BEGIN
 		:new.idGusano := NULL;
 	END IF;
 END explosionCaja;--OK
+
+
+CREATE OR REPLACE TRIGGER jugadorSeleccionaMaxTreArmas
+BEFORE INSERT OR UPDATE ON ARMASJUGADOR
+FOR EACH ROW
+DECLARE varCantidadArmas NUMBER;
+BEGIN
+    SELECT COUNT(*)
+      INTO varCantidadArmas
+       FROM ARMASJUGADOR
+      WHERE idJugador = :new.idJugador;
+	IF varCantidadArmas >= 30 THEN
+		raise_application_error(-20001,'Error: Los equipos solo pueden tener un máximo de 30 Armas');
+	END IF;
+END jugadorSeleccionaMaxTreArmas;--OK

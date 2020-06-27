@@ -1,16 +1,8 @@
-/*
-drop table ARMA;
-drop table GUSANO;
-drop table EQUIPO;
-drop table PARTIDA;
-drop table CELDA;
-drop table TABLERO;
-*/
 
 CREATE TABLE ARMA(
 	idArma NUMBER GENERATED ALWAYS AS IDENTITY(START WITH 1 INCREMENT by 1) primary key ,
 	nombre VARCHAR2(100) UNIQUE NOT NULL,
-	daño int NOT NULL,
+	danio int NOT NULL,
 	grupo VARCHAR2(5)
 );
 
@@ -36,7 +28,8 @@ CREATE TABLE GUSANO(
 	idGusano NUMBER GENERATED ALWAYS AS IDENTITY(START WITH 1 INCREMENT by 1) primary key,
 	salud NUMBER(3) NOT NULL CHECK(salud >=0 AND salud <= 100),
 	idEquipo NUMBER(10) NOT NULL REFERENCES EQUIPO  ON DELETE CASCADE,
-	accion VARCHAR(50) CHECK( accion IN ('Caminar', 'Saltar'))
+	accion VARCHAR(50) CHECK (accion IN ('Caminar', 'Saltar')),
+	nombre VARCHAR(50)
 );
 
 
@@ -55,13 +48,13 @@ CREATE TABLE ARMASJUGADOR(
 );
 
  CREATE TABLE TABLERO(
- 	id 		number(12)	not null primary key,
+ 	id 		number(12) GENERATED ALWAYS AS IDENTITY(START WITH 1 INCREMENT by 1) primary key,
  	X_columnas	 number(2) not null,
  	Y_filas		 number(2) not null
  );
 
  CREATE TABLE CELDA(
-	id NUMBER(12) NOT NULL PRIMARY KEY,
+	id NUMBER(12) GENERATED ALWAYS AS IDENTITY(START WITH 1 INCREMENT by 1) primary key,
 	X_columna number(2) NOT NULL,
 	Y_fila NUMBER(2) NOT NULL,
 	contenido char(1) NOT NULL CHECK (contenido in ('A','T','P','B','.','W','R','L','H')),
