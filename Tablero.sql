@@ -1,29 +1,9 @@
 
-DROP TABLE CELDA;
-DROP TABLE TABLERO;
---
---
---
- CREATE TABLE TABLERO(
- 	id 		number(12)	not null primary key,
- 	X_columnas	 number(2) not null,
- 	Y_filas		 number(2) not null
- );
-
- CREATE TABLE CELDA(
- 	id NUMBER(12) NOT NULL PRIMARY KEY,
-    X_columna number(2) NOT NULL,
- 	Y_fila NUMBER(2) NOT NULL,
-    contenido char(1) NOT NULL CHECK (contenido in ('A','T','P','B','.','W','R','L','H')),
- 	tableroid NUMBER(12) NOT NULL REFERENCES TABLERO,
-    idGusano NUMBER(10) REFERENCES GUSANO
- );
-
 
  insert into TABLERO (id,X_columnas,Y_filas) values (1,50,15);
  commit;
 --cargar un tablero
--- 
+--
 CREATE OR REPLACE PROCEDURE CARGAR_TABLERO (idTablero Tablero.id%TYPE) AS
  IDS NUMBER(8) := 0;
  contador NUMBER(8) := 0;
@@ -65,28 +45,23 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
  END;
 
 
-CREATE OR REPLACE PROCEDURE VER_TABLERO (idtablero Tablero.id%TYPE) AS
-casilla CHAR(1);
---i NUMBER(2,0);
---j NUMBER(2,0);
-BEGIN
-    --DBMS_OUTPUT.PUT_LINE('Start');
-   		FOR j IN 0..14 LOOP
- 			  FOR i IN 0..49 LOOP
-                        --DBMS_OUTPUT.PUT_LINE('Loop: '||i||j);
- 						SELECT contenido
-                        INTO casilla
-                          FROM CELDA
-                         WHERE tableroid = idtablero
-                           AND x_columna = i AND y_fila = j;
-                        IF i = 49 THEN
-                            DBMS_OUTPUT.PUT_LINE(casilla);
- 						ELSE
-                            DBMS_OUTPUT.PUT(casilla);
-                        END	IF;
- 			END LOOP;
+ CREATE OR REPLACE PROCEDURE VER_TABLERO(idTablero Tablero.id%TYPE) IS
+     casilla CHAR(1);
+     CURSOR cursorTablero IS
+         SELECT contenido, X_Columna, Y_Fila
+           FROM CELDA
+          WHERE TableroId = idTablero;
+     regTablero cursorTablero%ROWTYPE;
+ BEGIN
+     OPEN cursorTablero;
+     FETCH cursorTablero INTO regTablero;
+     WHILE cursorTablero%FOUND LOOP--Mientras existan datos
+         IF regTablero.X_Columna = 49 THEN
+             DBMS_OUTPUT.PUT_LINE(regTablero.Contenido);
+         ELSE
+             DBMS_OUTPUT.PUT(regTablero.Contenido);
+         END IF;
+        FETCH cursorTablero INTO regTablero;
      END LOOP;
---     EXCEPTION
---     WHEN NO_DATA_FOUND THEN
---     DBMS_OUTPUT.PUT_LINE('Error tablero: '||i||j);
+     CLOSE cursorTablero;
  END;
