@@ -6,6 +6,7 @@ CREATE OR REPLACE NONEDITIONABLE PROCEDURE SOLTAR_BURRO(idTablero NUMBER, Column
     varGusanoId NUMBER(10);
     varEquipoId NUMBER(10);
     varColumnaFin NUMBER(2);
+	excFueraRango EXCEPTION;
 
 BEGIN
     SELECT X_Columnas-1, Y_Filas-1
@@ -13,7 +14,8 @@ BEGIN
       FROM TABLERO
      WHERE id = idTablero;
     IF columna < 0 OR columna > varMaxColumnaTablero THEN
-        Raise_Application_Error(-20003, 'Valor de columna fuera del rango del tablero');
+        RAISE excFueraRango;
+		--Raise_Application_Error(-20003, 'Valor de columna fuera del rango del tablero');
     END IF;
     columnaInicial :=columna;
     IF (varMaxColumnaTablero - columna) < 5 THEN
@@ -65,8 +67,11 @@ BEGIN
             END IF;                
         END LOOP;
     END LOOP;
+	COMMIT;
     EXCEPTION
-  WHEN OTHERS THEN
-    DBMS_OUTPUT.PUT_LINE(SQLCODE || ' :''( ' || SQLERRM);
-    ROLLBACK;
+		WHEN excFueraRango THEN
+			DBMS_OUTPUT.PUT_LINE('Valor de columna fuera del rango del tablero');
+		WHEN OTHERS THEN
+			DBMS_OUTPUT.PUT_LINE('Error: ' || SQLCODE || ' - Mensaje: ' || SQLERRM);
+		ROLLBACK;
 END SOLTAR_BURRO;
