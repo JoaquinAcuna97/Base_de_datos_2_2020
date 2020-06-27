@@ -33,7 +33,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
  							contador := contador +1;
  							casilla := substr(terreno,contador,1);
  						END	IF;
- 						IF casilla in ('A','T','P','B','.')  THEN
+ 						IF casilla in ('A','T','P','B','.','W','R','H','L')  THEN
  								ids := ids +1;
  								insert into CELDA (id,X_columna,Y_fila,contenido,tableroid)
  								values (ids,i,j,casilla,1);
