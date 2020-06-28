@@ -109,7 +109,7 @@ BEGIN
     SELECT COUNT(*)
       INTO varCantidadArmas
        FROM ARMASJUGADOR
-      WHERE idJugador = :new.idJugador;
+      WHERE IDJUGADOR_ARMASJUGADOR = :new.IDJUGADOR_ARMASJUGADOR;
 	IF varCantidadArmas >= 30 THEN
 		raise_application_error(-20001,'Error: Los equipos solo pueden tener un máximo de 30 Armas');
 	END IF;

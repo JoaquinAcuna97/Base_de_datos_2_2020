@@ -61,14 +61,12 @@ BEGIN
                 continuar := FALSE;
             ELSIF regFila.Contenido <> '.' THEN
                 RAISE noDesplaza;
-				--DBMS_OUTPUT.PUT_LINE('Error: No se puede realizar el desplazamiento');
             END IF;
             FETCH cursorFilas INTO regFila;
         END LOOP;
         CLOSE cursorFilas;
     ELSE
 		RAISE noDesplaza;
-        --DBMS_OUTPUT.PUT_LINE('Error: No se puede realizar el desplazamiento');
     END IF;
 	COMMIT;
 	EXCEPTION
