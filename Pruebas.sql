@@ -1,7 +1,7 @@
 
 -- PRUEBAS VER TABLERO
 INSERT INTO  TABLERO (X_columnas,Y_filas) VALUES (50,15);
-EXEC CARGAR_TABLERO(1);
+EXEC CARGAR_TABLERO_BURRO(1);
 EXEC VER_TABLERO(1);
 
 --PRUEBAS SALTO BUNGEE
@@ -26,7 +26,7 @@ INSERT INTO GUSANO (salud, idEquipo, accion) VALUES(100,1,NULL);
 
 SELECT * FROM GUSANO;
 
-EXEC CARGAR_TABLERO(1);
+EXEC CARGAR_TABLERO_BURRO(1);
 EXEC VER_TABLERO(1);
 
 EXEC SALTO_BUNGEE(1 , 16, 12, 1)
@@ -51,7 +51,7 @@ INSERT INTO GUSANO (salud, idEquipo, accion) VALUES(100,62, NULL);
 --PRUEBAS gusanoSoloEnAire
 
 INSERT INTO  TABLERO (X_columnas,Y_filas) VALUES (50,15);
-EXEC CARGAR_TABLERO(1);
+EXEC CARGAR_TABLERO_BURRO(1);
 
 UPDATE CELDA
 SET contenido = 'W',
@@ -62,7 +62,8 @@ INSERT INTO PARTIDA
 (duracion, dificultad, estado)
 VALUES (15,'Facil','CARGANDO');
 
-INSERT INTO EQUIPO (Nombre, letra, derrotas, victorias, idPartida) VALUES ('UNO','W',0,0,1);
+INSERT INTO EQUIPO (Nombre, letra, derrotas, victorias, idPartida)
+VALUES ('UNO','W',0,0,1);
 
 INSERT INTO JUGADOR(Nombre,Tipo,idEquipo)
 VALUES ('Player1','Humano',1);
@@ -193,7 +194,7 @@ INSERT INTO JUGADOR(Nombre,Tipo,idEquipo)
 VALUES ('Playerw','IA',2);
 
 INSERT INTO  TABLERO (X_columnas,Y_filas,idPartida,1) VALUES (50,15);
-EXEC CARGAR_TABLERO(1);
+EXEC CARGAR_TABLERO_BURRO(1);
 
 
 SELECT * FROM PARTIDA;

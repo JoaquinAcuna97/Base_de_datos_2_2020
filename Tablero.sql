@@ -1,75 +1,37 @@
+insert into TABLERO (id,X_columnas,Y_filas) values (1,50,15);
 
-
- insert into TABLERO (id,X_columnas,Y_filas) values (1,50,15);
-
---cargar un tablero
---
-CREATE OR REPLACE PROCEDURE CARGAR_TABLERO (idTablero Tablero.id%TYPE) AS
- contador NUMBER(8) := 0;
- terreno VARCHAR2(1000) :='.................................................
-..................................................
-......P.PPPPP.....PPPPPPP...........PP............
-.........PPPPPPPPPPP.PPPPP..........PPP...........
-...........PPPPPPPP.....PPP...........PP..........
-..........PPPP..PPPP....................PP........
-.........PPPP.T.PPPP..PPPPPPPPPPPPPPP..PPP........
-........PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP.........
-........PPPP.....PPPPPPPPPPPPPPPPPPP..............
-..................PPPPPPPPPPPPPPPPPP..............
-..................PPPPP....PPPPPPPPP..............
-..................PPPPP........PP.PP..............
-...................PPP.......PPP.PPP..............
-............PPPPPPPPPPPPPPPPPPPPPPPPPPPPP.........
-TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
- casilla VARCHAR2(1000);
+ --cargar un tablero de burro
+CREATE OR REPLACE PROCEDURE CARGAR_TABLERO_BURRO (idTablero Tablero.id%TYPE) AS
+    exec :terreno := '..........W.........R...............R.............-......P.PPPPP..R.WPPPPPPP...........PPR...........-.........PPPPPPPPPPP.PPPPP..........PPP...........-...........PPPPPPPP.....PPP...........PP..........-.........RPPPP..PPPP.....W......W.......PP........-.........PPPP.T.PPPP..PPPPPPPPPPPPPPPR.PPP........-........PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP.........-........PPPP.....PPPPPPPPPPPPPPPPPPP..............-..................PPPPPPPPPPPPPPPPPP..............-..................PPPPP....PPPPPPPPP..............-..................PPPPP........PP.PP..............-.............R.....PPP..W....PPP.PPP..W...........-.....R..W...PPPPPPPPPPPPPPPPPPPPPPPPPPPPP...W.....-AAAATTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTAAAAA-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
+    exec CARGAR_TABLERO (idTablero, :terreno);
  BEGIN
-   		FOR j IN 0..14 LOOP
- 			  FOR i IN 0..49 LOOP
- 						contador := contador +1;
-             casilla := substr(terreno,contador,1);
-             DBMS_OUTPUT.PUT(casilla);
- 						IF casilla=chr(13) OR casilla=chr(10) THEN
- 							contador := contador +1;
- 							casilla := substr(terreno,contador,1);
-              DBMS_OUTPUT.PUT_LINE('');
-              DBMS_OUTPUT.PUT(casilla);
- 						END	IF;
- 						IF casilla in ('A','T','P','B','.','W','R','H','L')  THEN
- 								insert into CELDA (X_columna,Y_fila,contenido,tableroid)
- 								values (i,j,casilla,idTablero);
-                commit;
-             END IF;
- 			END LOOP;
-     END LOOP;
+
  END;
 
-
- CREATE OR REPLACE PROCEDURE CARGAR_TABLERO (idTablero Tablero.id%TYPE) AS
-  IDS NUMBER(8) := 0;
-  contador NUMBER(8) := 0;
-  terreno VARCHAR2(1000) :='..................................................-......P.PPPPP.....PPPPPPP...........PP............-.........PPPPPPPPPPP.PPPPP..........PPP...........-...........PPPPPPPP.....PPP...........PP..........-..........PPPP..PPPP....................PP........-.........PPPP.T.PPPP..PPPPPPPPPPPPPPP..PPP........-........PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP.........-........PPPP.....PPPPPPPPPPPPPPPPPPP..............-..................PPPPPPPPPPPPPPPPPP..............-..................PPPPP....PPPPPPPPP..............-..................PPPPP........PP.PP..............-...................PPP.......PPP.PPP..............-............PPPPPPPPPPPPPPPPPPPPPPPPPPPPP.........-TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
-  casilla VARCHAR2(1000);
-  BEGIN
-    		FOR j IN 0..14 LOOP
-  			  FOR i IN 0..49 LOOP
-  						contador := contador +1;
-                         casilla := substr(terreno,contador,1);
-  						--IF casilla=chr(13) OR casilla=chr(10) THEN
-  						IF casilla='-' THEN
-  							contador := contador +1;
-  							casilla := substr(terreno,contador,1);
-  						END	IF;
-  						IF casilla in ('A','T','P','B','.','W','R','H','L')  THEN
-  								--ids := ids +1;
-  								insert into CELDA (X_columna,Y_fila,contenido,tableroid)
-  								values (i,j,casilla,1);
-                         commit;
-             END IF;
-  			END LOOP;
-      END LOOP;
-
-  END;
+ --cargar un tablero Cualquiera de 50*15
+CREATE OR REPLACE PROCEDURE CARGAR_TABLERO (idTablero Tablero.id%TYPE, varTerreno VARCHAR2) AS
+ --IDS NUMBER(8) := 0;
+ contador NUMBER(8) := 0;
+ --varTerreno VARCHAR2(1000);
+ casilla VARCHAR2(1000);
+ BEGIN
+	FOR j IN 0..14 LOOP
+		FOR i IN 0..49 LOOP
+			contador := contador +1;
+			casilla := substr(varTerreno,contador,1);
+			--IF casilla=chr(13) OR casilla=chr(10) THEN
+			IF casilla = '-' THEN
+				contador := contador +1;
+				casilla := substr(varTerreno,contador,1);
+			END	IF;
+			IF casilla in ('A','T','P','B','.','W','R','H','L')  THEN
+				insert into CELDA (X_columna,Y_fila,contenido,tableroid)
+				values (i,j,casilla,1);
+				COMMIT;
+			END IF;
+		END LOOP;
+    END LOOP;
+ END;
 
  CREATE OR REPLACE PROCEDURE VER_TABLERO(idTablero Tablero.id%TYPE) IS
      casilla CHAR(1);
