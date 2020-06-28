@@ -8,7 +8,7 @@ create or replace NONEDITIONABLE PROCEDURE VER_TABLERO(idTablero Tablero.id%TYPE
          WHERE TableroId = idTablero
          ORDER BY id;
     regTablero cursorTablero%ROWTYPE;
-BEGIN    
+BEGIN
     SELECT X_Columnas - 1
       INTO varColumnaMax
       FROM TABLERO
