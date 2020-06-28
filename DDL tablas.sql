@@ -17,6 +17,7 @@ CREATE TABLE ARMA(
 CREATE TABLE PARTIDA(
 	idPartida NUMBER GENERATED ALWAYS AS IDENTITY(START WITH 1 INCREMENT by 1) primary key,
 	duracion NUMBER(2) NOT NULL CHECK( duracion IN(15, 20, 25)),
+	turno NUMBER(2) NOT NULL CHECK(turno =30),
 	dificultad VARCHAR(50) NOT NULL CHECK(dificultad IN ('Facil', 'Intermedio', 'Dificil')),
 	estado VARCHAR2(50) NOT NULL CHECK( estado IN ('CARGANDO', 'INICIADA', 'FINALIZADA'))
 );
@@ -40,26 +41,25 @@ CREATE TABLE GUSANO(
 	nombre VARCHAR(50)
 );
 
-
-
-
 CREATE TABLE JUGADOR(
 	idJugador NUMBER GENERATED ALWAYS AS IDENTITY(START WITH 1 INCREMENT by 1) primary key,
 	Nombre VARCHAR2(200),
 	Tipo VARCHAR(20) CHECK(Tipo IN ('Humano', 'IA')),
-	idEquipo NUMBER(10) NOT NULL REFERENCES EQUIPO  ON DELETE CASCADE
+	idEquipo NUMBER(10) NOT NULL REFERENCES EQUIPO  ON SET NULL
 );
 
 
 CREATE TABLE ARMASJUGADOR(
 	idjugador_armasjugador NUMBER NOT NULL REFERENCES JUGADOR ON DELETE SET NULL,
-	idarma_armasjugador NUMBER NOT NULL REFERENCES ARMA ON DELETE SET NULL
+	idarma_armasjugador NUMBER NOT NULL REFERENCES ARMA ON DELETE SET NULL,
+	CONSTRAINT unique_arma_jugador UNIQUE(idjugador_armasjugador, idarma_armasjugador)
 );
 
  CREATE TABLE TABLERO(
  	id 		number(12) GENERATED ALWAYS AS IDENTITY(START WITH 1 INCREMENT by 1) primary key,
- 	X_columnas	 number(2) not null,
- 	Y_filas		 number(2) not null
+ 	X_columnas	 number(2) not null CHECK (X_columnas =50),
+ 	Y_filas		 number(2) not null CHECK (Y_filas =15),
+	idPartida NUMBER(10) NOT NULL REFERENCES PARTIDA  ON DELETE CASCADE
  );
 
  CREATE TABLE CELDA(
@@ -67,6 +67,6 @@ CREATE TABLE ARMASJUGADOR(
 	X_columna number(2) NOT NULL,
 	Y_fila NUMBER(2) NOT NULL,
 	contenido char(1) NOT NULL CHECK (contenido in ('A','T','P','B','.','W','R','L','H')),
-	tableroid NUMBER(12) NOT NULL REFERENCES TABLERO,
+	tableroid NUMBER(12) NOT NULL REFERENCES TABLERO ON DELETE CASCADE,
 	idGusano NUMBER(10) REFERENCES GUSANO
  );

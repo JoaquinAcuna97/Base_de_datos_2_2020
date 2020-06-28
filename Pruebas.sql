@@ -52,6 +52,7 @@ INSERT INTO GUSANO (salud, idEquipo, accion) VALUES(100,62, NULL);
 
 INSERT INTO  TABLERO (X_columnas,Y_filas) VALUES (50,15);
 EXEC CARGAR_TABLERO(1);
+
 UPDATE CELDA
 SET contenido = 'W',
 WHERE tableroid = 1;
@@ -60,6 +61,7 @@ WHERE tableroid = 1;
 INSERT INTO PARTIDA
 (duracion, dificultad, estado)
 VALUES (15,'Facil','CARGANDO');
+
 INSERT INTO EQUIPO (Nombre, letra, derrotas, victorias, idPartida) VALUES ('UNO','W',0,0,1);
 
 INSERT INTO JUGADOR(Nombre,Tipo,idEquipo)
@@ -158,3 +160,52 @@ INSERT INTO ARMASJUGADOR(idjugador_armasjugador,idarma_armasjugador) values(1, 2
 INSERT INTO ARMASJUGADOR(idjugador_armasjugador,idarma_armasjugador) values(1, 30 );
 INSERT INTO ARMASJUGADOR(idjugador_armasjugador,idarma_armasjugador) values(1, 31 );
 INSERT INTO ARMASJUGADOR(idjugador_armasjugador,idarma_armasjugador) values(1, 32 );
+
+
+--PRUEBAS RESUMEN_PARTIDA
+
+INSERT INTO PARTIDA
+(duracion, dificultad, estado)
+VALUES (15,'Facil','FINALIZADA');
+
+INSERT INTO EQUIPO (Nombre, letra, derrotas, victorias, idPartida) VALUES ('UNO','W',4,3,1);
+INSERT INTO EQUIPO (Nombre, letra, derrotas, victorias, idPartida) VALUES ('DOS','P',0,4,1);
+
+INSERT INTO JUGADOR(Nombre,Tipo,idEquipo)
+VALUES ('Player1','Humano',1);
+INSERT INTO JUGADOR(Nombre,Tipo,idEquipo)
+VALUES ('Playerw','IA',2);
+
+RESUMEN_PARTIDA(1);
+
+--PRUEBAS ELIMINAR_PARTIDA
+
+INSERT INTO PARTIDA
+(duracion, dificultad, estado)
+VALUES (15,'Facil','FINALIZADA');
+
+INSERT INTO EQUIPO (Nombre, letra, derrotas, victorias, idPartida) VALUES ('UNO','W',4,3,1);
+INSERT INTO EQUIPO (Nombre, letra, derrotas, victorias, idPartida) VALUES ('DOS','P',0,4,1);
+
+INSERT INTO JUGADOR(Nombre,Tipo,idEquipo)
+VALUES ('Player1','Humano',1);
+INSERT INTO JUGADOR(Nombre,Tipo,idEquipo)
+VALUES ('Playerw','IA',2);
+
+INSERT INTO  TABLERO (X_columnas,Y_filas,idPartida,1) VALUES (50,15);
+EXEC CARGAR_TABLERO(1);
+
+
+SELECT * FROM PARTIDA;
+SELECT * FROM EQUIPO;
+SELECT * FROM JUGADOR;
+SELECT * FROM TABLERO;
+SELECT * FROM CELDA;
+
+ELIMINAR_PARTIDA(1);
+
+SELECT * FROM PARTIDA;
+SELECT * FROM EQUIPO;
+SELECT * FROM JUGADOR;
+SELECT * FROM TABLERO;
+SELECT * FROM CELDA;
