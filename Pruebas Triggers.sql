@@ -1,6 +1,8 @@
 
+
 -- PRUEBAS VER TABLERO
-INSERT INTO  TABLERO (X_columnas,Y_filas) VALUES (50,15);
+INSERT INTO PARTIDA (duracion, turno, dificultad, estado) VALUES (15, 30, 'Facil','CARGANDO');
+INSERT INTO  TABLERO (X_columnas,Y_filas, idPartida) VALUES (50,15, 1);
 EXEC CARGAR_TABLERO_BURRO(1);
 EXEC VER_TABLERO(1);
 
