@@ -8,7 +8,6 @@ END;
 
 
 CREATE OR REPLACE PROCEDURE ELIMINAR_PARTIDA (partidaId NUMBER) AS
-
    BEGIN
       DELETE FROM partida
       WHERE partida.idPartida = partidaId;
