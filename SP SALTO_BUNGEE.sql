@@ -24,14 +24,14 @@ BEGIN
         UPDATE CELDA
            SET idGusano = NULL
          WHERE tableroId = idTablero
-           AND idGusano = gusanoId;        
+           AND idGusano = gusanoId;
         UPDATE CELDA
            SET Contenido = v_Equipo
          WHERE TableroId = idTablero
            AND X_Columna =  regFila.X_Columna
            AND Y_Fila = regFila.Y_Fila;
         continuar := FALSE;
-    ELSIF regFila.Contenido = '.' THEN                
+    ELSIF regFila.Contenido = '.' THEN
         FETCH cursorFilas INTO regFila;
         WHILE cursorFilas%FOUND AND continuar LOOP
             IF regFila.Contenido IN ('P','T') THEN
@@ -49,7 +49,8 @@ BEGIN
                 continuar := FALSE;
             ELSIF regFila.Contenido IN ('B', 'A') THEN
                 UPDATE CELDA
-				   SET idGusano = NULL
+				   SET idGusano = NULL,
+                       contenido = '.'
 				 WHERE tableroId = idTablero
 				   AND idGusano = gusanoId;
 				UPDATE CELDA
@@ -57,7 +58,7 @@ BEGIN
                        idGusano = gusanoId
                  WHERE tableroId = idTablero
                    AND Y_Fila = regFila.Y_Fila
-                   AND X_Columna = regFila.X_Columna;				
+                   AND X_Columna = regFila.X_Columna;
                 continuar := FALSE;
             ELSIF regFila.Contenido <> '.' THEN
                 RAISE noDesplaza;

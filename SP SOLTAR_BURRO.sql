@@ -38,7 +38,7 @@ BEGIN
               FROM CELDA
              WHERE Y_Fila = fila
                AND X_Columna = col
-               AND tableroId = idTablero;            
+               AND tableroId = idTablero;
             IF contenidoCelda IN ('P','T','B') THEN
                 UPDATE CELDA
                    SET contenido = '.'
@@ -69,11 +69,12 @@ BEGIN
                  WHERE idEquipo = equipoId;
                 --Modifico contenido a aire
                 UPDATE CELDA
-                   SET contenido = '.'
+                   SET contenido = '.',
+                       idGusano = NULL
                  WHERE tableroId = idTablero
                    AND Y_Fila = fila
-                   AND X_Columna = col;                
-            END IF;                
+                   AND X_Columna = col;
+            END IF;
         END LOOP;
     END LOOP;
 	COMMIT;

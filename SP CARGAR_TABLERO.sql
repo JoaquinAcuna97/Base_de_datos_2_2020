@@ -1,12 +1,13 @@
-insert into TABLERO (id,X_columnas,Y_filas) values (1,50,15);
+INSERT INTO PARTIDA (duracion, turno, dificultad, estado) VALUES (15, 30, 'Facil','CARGANDO');
+INSERT INTO TABLERO (X_columnas,Y_filas, idPartida) values (50,15,1);
 
  --cargar un tablero de burro
-CREATE OR REPLACE PROCEDURE CARGAR_TABLERO_BURRO (idTablero Tablero.id%TYPE) AS
-    exec :terreno := '..................................................-......P.PPPPP.....PPPPPPP...........PP............-.........PPPPPPPPPPP.PPPPP..........PPP...........-...........PPPPPPPP.....PPP...........PP..........-..........PPPP..PPPP....................PP........-.........PPPP.T.PPPP..PPPPPPPPPPPPPPP..PPP........-........PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP.........-........PPPP.....PPPPPPPPPPPPPPPPPPP..............-..................PPPPPPPPPPPPPPPPPP..............-..................PPPPP....PPPPPPPPP..............-..................PPPPP........PP.PP..............-............W......PPP.......PPP.PPP..............-............PPPPBPPPPPPPPPPPPPPPPPPPPPPPP.........-AAATTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
-    exec CARGAR_TABLERO (idTablero, :terreno);
- BEGIN
+ CREATE OR REPLACE PROCEDURE CARGAR_TABLERO_BURRO (idTablero Tablero.id%TYPE) AS
+     terreno VARCHAR2(1000):= '..................................................-......P.PPPPP.....PPPPPPP...........PP............-.........PPPPPPPPPPP.PPPPP..........PPP...........-...........PPPPPPPP.....PPP...........PP..........-..........PPPP..PPPP....................PP........-.........PPPP.T.PPPP..PPPPPPPPPPPPPPP..PPP........-........PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP.........-........PPPP.....PPPPPPPPPPPPPPPPPPP..............-..................PPPPPPPPPPPPPPPPPP..............-..................PPPPP....PPPPPPPPP..............-..................PPPPP........PP.PP..............-............W......PPP.......PPP.PPP..............-............PPPPBPPPPPPPPPPPPPPPPPPPPPPPP.........-AAATTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 
- END;
+  BEGIN
+     CARGAR_TABLERO (idTablero, terreno);
+  END;
 
  --cargar un tablero Cualquiera de 50*15
 CREATE OR REPLACE PROCEDURE CARGAR_TABLERO (idTablero Tablero.id%TYPE, varTerreno VARCHAR2) AS
