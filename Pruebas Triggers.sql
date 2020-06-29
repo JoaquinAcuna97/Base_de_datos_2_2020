@@ -7,7 +7,7 @@ EXEC VER_TABLERO(1);
 
 --PRUEBAS gusanoSoloEnAire
 
-INSERT INTO  TABLERO (X_columnas,Y_filas) VALUES (50,15);
+INSERT INTO TABLERO (X_columnas,Y_filas, idPartida) VALUES (50,15, 1);
 EXEC CARGAR_TABLERO_BURRO(1);
 
 UPDATE CELDA
@@ -15,15 +15,9 @@ SET contenido = 'W',
 WHERE tableroid = 1;
 
 --PRUEBAS jugadorSeleccionaMaxTreintaArmas
-INSERT INTO PARTIDA
-(duracion, dificultad, estado)
-VALUES (15,'Facil','CARGANDO');
-
-INSERT INTO EQUIPO (Nombre, letra, derrotas, victorias, idPartida)
-VALUES ('UNO','W',0,0,1);
-
-INSERT INTO JUGADOR(Nombre,Tipo,idEquipo)
-VALUES ('Player1','Humano',1);
+INSERT INTO PARTIDA (duracion, dificultad, estado) VALUES (15,'Facil','CARGANDO');
+INSERT INTO EQUIPO (Nombre, letra, derrotas, victorias, idPartida) VALUES ('UNO','W',0,0,1);
+INSERT INTO JUGADOR(Nombre,Tipo,idEquipo) VALUES ('Player1','Humano',1);
 
 INSERT INTO ARMA(NOMBRE,DANIO) VALUES('Stone Canary',100);
 INSERT INTO ARMA(NOMBRE,DANIO) VALUES('Air Strike',100);
@@ -118,39 +112,29 @@ INSERT INTO ARMASJUGADOR(idjugador_armasjugador,idarma_armasjugador) values(1, 2
 INSERT INTO ARMASJUGADOR(idjugador_armasjugador,idarma_armasjugador) values(1, 30 );
 INSERT INTO ARMASJUGADOR(idjugador_armasjugador,idarma_armasjugador) values(1, 31 );
 INSERT INTO ARMASJUGADOR(idjugador_armasjugador,idarma_armasjugador) values(1, 32 );
-
-
 --PRUEBAS RESUMEN_PARTIDA
 
-INSERT INTO PARTIDA
-(duracion, dificultad, estado)
-VALUES (15,'Facil','FINALIZADA');
+INSERT INTO PARTIDA (duracion, dificultad, estado) VALUES (15,'Facil','FINALIZADA');
 
 INSERT INTO EQUIPO (Nombre, letra, derrotas, victorias, idPartida) VALUES ('UNO','W',4,3,1);
 INSERT INTO EQUIPO (Nombre, letra, derrotas, victorias, idPartida) VALUES ('DOS','P',0,4,1);
 
-INSERT INTO JUGADOR(Nombre,Tipo,idEquipo)
-VALUES ('Player1','Humano',1);
-INSERT INTO JUGADOR(Nombre,Tipo,idEquipo)
-VALUES ('Playerw','IA',2);
+INSERT INTO JUGADOR(Nombre,Tipo,idEquipo) VALUES ('Player1','Humano',1);
+INSERT INTO JUGADOR(Nombre,Tipo,idEquipo) VALUES ('Playerw','IA',2);
 
-RESUMEN_PARTIDA(1);
+EXEC RESUMEN_PARTIDA(1);
 
 --PRUEBAS ELIMINAR_PARTIDA
 
-INSERT INTO PARTIDA
-(duracion, dificultad, estado)
-VALUES (15,'Facil','FINALIZADA');
+INSERT INTO PARTIDA (duracion, dificultad, estado) VALUES (15,'Facil','FINALIZADA');
 
 INSERT INTO EQUIPO (Nombre, letra, derrotas, victorias, idPartida) VALUES ('UNO','W',4,3,1);
 INSERT INTO EQUIPO (Nombre, letra, derrotas, victorias, idPartida) VALUES ('DOS','P',0,4,1);
 
-INSERT INTO JUGADOR(Nombre,Tipo,idEquipo)
-VALUES ('Player1','Humano',1);
-INSERT INTO JUGADOR(Nombre,Tipo,idEquipo)
-VALUES ('Playerw','IA',2);
+INSERT INTO JUGADOR(Nombre,Tipo,idEquipo) VALUES ('Player1','Humano',1);
+INSERT INTO JUGADOR(Nombre,Tipo,idEquipo) VALUES ('Playerw','IA',2);
 
-INSERT INTO  TABLERO (X_columnas,Y_filas,idPartida,1) VALUES (50,15);
+INSERT INTO TABLERO (X_columnas,Y_filas, idPartida) VALUES (50,15, 1);
 EXEC CARGAR_TABLERO_BURRO(1);
 
 
@@ -160,7 +144,7 @@ SELECT * FROM JUGADOR;
 SELECT * FROM TABLERO;
 SELECT * FROM CELDA;
 
-ELIMINAR_PARTIDA(1);
+EXEC ELIMINAR_PARTIDA(1);
 
 SELECT * FROM PARTIDA;
 SELECT * FROM EQUIPO;
@@ -191,19 +175,16 @@ INSERT INTO EQUIPO (Nombre, letra, derrotas, victorias, idPartida) VALUES ('CUAT
 
 --INSERT QUE VERIFICA EL TRIGGER
 INSERT INTO EQUIPO (Nombre, letra, derrotas, victorias, idPartida) VALUES ('UNO','W',0,0,1);
-
 --PRUEBAS unJugadorHumano
 INSERT INTO PARTIDA (duracion, turno, dificultad, estado) VALUES (15, 30, 'Facil','CARGANDO');
 INSERT INTO EQUIPO (Nombre, letra, derrotas, victorias, idPartida) VALUES ('UNO','W',0,0,1);
 INSERT INTO EQUIPO (Nombre, letra, derrotas, victorias, idPartida) VALUES ('DOS','R',0,0,1);
 INSERT INTO JUGADOR(Nombre, Tipo, idEquipo) VALUES('Jugador Uno', 'IA', 1);
 INSERT INTO JUGADOR(Nombre, Tipo, idEquipo) VALUES('Jugador Dos', 'IA', 2);
-
 --PRUEBA QUE VERIFICA EL TRIGGER
 UPDATE PARTIDA
    SET estado = 'INICIADA'
- WHERE idPartida = 1
-
+ WHERE idPartida = 1;
 
  --PRUEBAS gusanoMuereContactoAgua
  INSERT INTO PARTIDA (duracion, turno, dificultad, estado) VALUES (15, 30, 'Facil','CARGANDO');
@@ -217,17 +198,17 @@ UPDATE PARTIDA
  /
  exec CARGAR_TABLERO (1, :terreno);
  /
- EXEC CARGAR_FK_GUSANOS(1, 1)
+ EXEC CARGAR_FK_GUSANOS(1, 1);
  /
- EXEC ver_tablero(1)
+ EXEC ver_tablero(1);
  /
  select * from celda where y_fila = 12 and x_columna = 8;
  /
- select * from gusano where idGusano = 2
+ select * from gusano where idGusano = 2;
  /
- EXEC SALTO_BUNGEE(1 , 2, 4, 2)
+ EXEC SALTO_BUNGEE(1 , 2, 4, 2);
  /
- exec ver_tablero(1)
+ exec ver_tablero(1);
 
 --PRUEBAS FK_VALIDA_GUSANO
  INSERT INTO PARTIDA (duracion, turno, dificultad, estado) VALUES (15, 30, 'Facil','CARGANDO');
@@ -244,4 +225,4 @@ UPDATE PARTIDA
 update celda
    set idgusano = 2
 WHERE x_columna = 8
-  and y_fila = 12
+  and y_fila = 12;
